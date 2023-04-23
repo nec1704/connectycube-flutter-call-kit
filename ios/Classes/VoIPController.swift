@@ -49,7 +49,7 @@ extension VoIPController: PKPushRegistryDelegate {
         }
     }
     
-    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
+    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
         NSLog("[VoIPController][pushRegistry][didReceiveIncomingPushWith] payload: \(payload.dictionaryPayload)")
         let callData = payload.dictionaryPayload
         
@@ -69,6 +69,10 @@ extension VoIPController: PKPushRegistryDelegate {
                 } else {
                     NSLog("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall ERROR: \(error?.localizedDescription ?? "none")")
                 }
+            }
+            
+            if let version = Float(UIDevice.current.systemVersion), version >= 13.0 {
+                completion()
             }
         }
     }
