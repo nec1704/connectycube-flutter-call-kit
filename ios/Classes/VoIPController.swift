@@ -32,25 +32,25 @@ class VoIPController : NSObject{
 extension VoIPController: PKPushRegistryDelegate {
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
         if pushCredentials.token.count == 0 {
-            print("[VoIPController][pushRegistry] No device token!")
+            NSLog("[VoIPController][pushRegistry] No device token!")
             return
         }
         
-        print("[VoIPController][pushRegistry] token: \(pushCredentials.token)")
+        NSLog("[VoIPController][pushRegistry] token: \(pushCredentials.token)")
         
         let deviceToken: String = pushCredentials.token.reduce("", {$0 + String(format: "%02X", $1) })
-        print("[VoIPController][pushRegistry] deviceToken: \(deviceToken)")
+        NSLog("[VoIPController][pushRegistry] deviceToken: \(deviceToken)")
         
         self.voipToken = deviceToken
         
         if tokenListener != nil {
-            print("[VoIPController][pushRegistry] notify listener")
+            NSLog("[VoIPController][pushRegistry] notify listener")
             tokenListener!(self.voipToken!)
         }
     }
     
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
-        print("[VoIPController][pushRegistry][didReceiveIncomingPushWith] payload: \(payload.dictionaryPayload)")
+        NSLog("[VoIPController][pushRegistry][didReceiveIncomingPushWith] payload: \(payload.dictionaryPayload)")
         let callData = payload.dictionaryPayload
         
         if type == .voIP{
@@ -65,9 +65,9 @@ extension VoIPController: PKPushRegistryDelegate {
             
             self.callKitController.reportIncomingCall(uuid: callId.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo) { (error) in
                 if(error == nil){
-                    print("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall SUCCESS")
+                    NSLog("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall SUCCESS")
                 } else {
-                    print("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall ERROR: \(error?.localizedDescription ?? "none")")
+                    NSLog("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall ERROR: \(error?.localizedDescription ?? "none")")
                 }
             }
         }
