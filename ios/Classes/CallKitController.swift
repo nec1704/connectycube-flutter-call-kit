@@ -197,7 +197,7 @@ class CallKitController : NSObject {
             try audioSession.setPreferredIOBufferDuration(0.005)
             try audioSession.setActive(active)
         } catch {
-            NSLog(error)
+            NSLog("Error: %@", error.localizedDescription)
         }
     }
 }
