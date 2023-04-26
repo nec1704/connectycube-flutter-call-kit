@@ -63,17 +63,18 @@ extension VoIPController: PKPushRegistryDelegate {
                 .map { Int($0) ?? 0 }
             let userInfo = callData["user_info"] as? String
             
-            self.callKitController.reportIncomingCall(uuid: callId.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo, completion: completion) { (error) in
+            self.callKitController.reportIncomingCall(uuid: callId.lowercased(), callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo) { (error) in
                 if(error == nil){
                     NSLog("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall SUCCESS")
                 } else {
                     NSLog("[VoIPController][didReceiveIncomingPushWith] reportIncomingCall ERROR: \(error?.localizedDescription ?? "none")")
                 }
+                if let version = Float(UIDevice.current.systemVersion), version >= 13.0 {
+                    completion()
+                }
             }
             
-            if let version = Float(UIDevice.current.systemVersion), version >= 13.0 {
-                completion()
-            }
+           
         }
     }
 }
