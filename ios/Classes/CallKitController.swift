@@ -108,7 +108,7 @@ class CallKitController : NSObject {
         configureAudioSession(active: true)
         if (self.currentCallData["session_id"] == nil || self.currentCallData["session_id"] as! String != uuid) {
             NSLog("[CallKitController][reportIncomingCall] report new call: \(uuid)")
-            provider.reportNewIncomingCall(with: UUID(uuidString: uuid)!, update: update) { error in
+            provider.reportNewIncomingCall(with: UUID(uuidString: uuid)!, update: update, completion: completion) { error in
                 completion?(error)
                 if(error == nil){
                     self.configureAudioSession(active: true)
